@@ -1,0 +1,12 @@
+"""
+StoryForge AI - SQLAlchemy Declarative Base
+
+Shared base class for all ORM models.
+"""
+
+from sqlalchemy.orm import DeclarativeBase
+
+
+class Base(DeclarativeBase):
+    """Base class for all SQLAlchemy ORM models."""
+    pass

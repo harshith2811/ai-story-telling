@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StoryForge AI — Viral Shorts & Storytelling Studio</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            },
+            dark: {
+              950: '#07090e',
+              900: '#0b0f19',
+              850: '#111726',
+              800: '#161f33',
+              700: '#23304c',
+              600: '#334155',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0b0f19; }
+    ::-webkit-scrollbar-thumb { background: #23304c; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #d97706; }
+    .gold-gradient {
+      background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #d97706 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-dark-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-brand-500 selection:text-black">
+
+  <!-- TOP HEADER -->
+  <header class="border-b border-dark-800 bg-dark-900/90 backdrop-blur sticky top-0 z-50 px-6 py-3.5 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-amber-300 flex items-center justify-center shadow-lg shadow-amber-500/20">
+        <i data-lucide="sparkles" class="w-5 h-5 text-black stroke-[2.5]"></i>
+      </div>
+      <div>
+        <h1 class="font-extrabold text-lg tracking-tight flex items-center gap-2">
+          StoryForge <span class="gold-gradient">AI</span>
+          <span class="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-brand-500/10 text-brand-400 border border-brand-500/20">Studio v1.0</span>
+        </h1>
+        <p class="text-xs text-slate-400">Autonomous Vertical Video & Story Production Engine</p>
+      </div>
+    </div>
+
+    <!-- System Diagnostics Badge -->
+    <div class="flex items-center space-x-3 text-xs">
+      <div id="service-pill" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-dark-800 border border-dark-700 text-slate-300">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span id="service-status-text">FFmpeg & Neural TTS Ready</span>
+      </div>
+      <button onclick="switchTab('settings')" class="p-2 rounded-lg bg-dark-800 hover:bg-dark-700 border border-dark-700 text-slate-300 transition">
+        <i data-lucide="settings" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <div class="flex-1 flex overflow-hidden">
+
+    <!-- SIDEBAR NAV -->
+    <aside class="w-64 border-r border-dark-800 bg-dark-900 flex flex-col justify-between p-4 space-y-6">
+      <nav class="space-y-1.5">
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-sm font-medium transition text-brand-400 bg-brand-500/10 border border-brand-500/20">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+        </button>
+        <button onclick="switchTab('create')" id="nav-create" class="nav-btn flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-sm font-medium transition text-slate-300 hover:bg-dark-800">
+          <i data-lucide="wand-2" class="w-4 h-4"></i> Create Story
+        </button>
+        <button onclick="switchTab('story-editor')" id="nav-story-editor" class="nav-btn flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-sm font-medium transition text-slate-300 hover:bg-dark-800">
+          <i data-lucide="file-edit" class="w-4 h-4"></i> Story & Hooks
+        </button>
+        <button onclick="switchTab('storyboard')" id="nav-storyboard" class="nav-btn flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-sm font-medium transition text-slate-300 hover:bg-dark-800">
+          <i data-lucide="clapperboard" class="w-4 h-4"></i> Storyboard
+        </button>
+        <button onclick="switchTab('voice-studio')" id="nav-voice-studio" class="nav-btn flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-sm font-medium transition text-slate-300 hover:bg-dark-800">
+          <i data-lucide="mic" class="w-4 h-4"></i> Voice Studio
+        </button>
+        <button onclick="switchTab('video-editor')" id="nav-video-editor" class="nav-btn flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-sm font-medium transition text-slate-300 hover:bg-dark-800">
+          <i data-lucide="film" class="w-4 h-4"></i> Video Production
+        </button>
+        <button onclick="switchTab('analytics')" id="nav-analytics" class="nav-btn flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-sm font-medium transition text-slate-300 hover:bg-dark-800">
+          <i data-lucide="bar-chart-3" class="w-4 h-4"></i> Viral Analytics
+        </button>
+      </nav>
+
+      <!-- Active Project Box -->
+      <div id="active-project-card" class="bg-dark-850 border border-dark-700/80 rounded-xl p-3.5">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+          <span>Active Project</span>
+          <span id="proj-status-badge" class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-medium">Ready</span>
+        </div>
+        <p id="proj-title-display" class="font-semibold text-sm truncate text-white">None selected</p>
+        <div class="mt-2.5 flex items-center justify-between pt-2 border-t border-dark-700 text-xs text-slate-400">
+          <span id="proj-duration-display">0s</span>
+          <span id="proj-lang-display">English</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTENT PANELS -->
+    <main class="flex-1 overflow-y-auto p-8 bg-dark-950">
+
+      <!-- 1. DASHBOARD TAB -->
+      <section id="tab-dashboard" class="space-y-8">
+        <div>
+          <h2 class="text-2xl font-bold tracking-tight">Studio Overview</h2>
+          <p class="text-sm text-slate-400 mt-1">Monitor end-to-end production pipeline, recent stories, and metrics.</p>
+        </div>
+
+        <!-- Metric Stat Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+          <div class="bg-dark-900 border border-dark-800 rounded-2xl p-5 relative overflow-hidden">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Videos Generated</span>
+              <i data-lucide="video" class="w-5 h-5 text-amber-400"></i>
+            </div>
+            <p id="stat-total-videos" class="text-3xl font-black mt-2 text-white">0</p>
+            <span class="text-xs text-emerald-400 mt-2 inline-flex items-center gap-1 font-medium">
+              <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> 100% 1080x1920 MP4
+            </span>
+          </div>
+
+          <div class="bg-dark-900 border border-dark-800 rounded-2xl p-5 relative overflow-hidden">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Avg Quality Score</span>
+              <i data-lucide="award" class="w-5 h-5 text-amber-400"></i>
+            </div>
+            <p class="text-3xl font-black mt-2 text-white">91<span class="text-sm font-normal text-slate-400">/100</span></p>
+            <span class="text-xs text-amber-400 mt-2 inline-flex items-center gap-1 font-medium">
+              <i data-lucide="zap" class="w-3.5 h-3.5"></i> High-Retention Pacing
+            </span>
+          </div>
+
+          <div class="bg-dark-900 border border-dark-800 rounded-2xl p-5 relative overflow-hidden">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Languages</span>
+              <i data-lucide="languages" class="w-5 h-5 text-amber-400"></i>
+            </div>
+            <p class="text-3xl font-black mt-2 text-white">EN & TE</p>
+            <span class="text-xs text-slate-400 mt-2 inline-flex items-center gap-1 font-medium">
+              Native Neural Narration
+            </span>
+          </div>
+
+          <div class="bg-dark-900 border border-dark-800 rounded-2xl p-5 relative overflow-hidden">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Rendering Engine</span>
+              <i data-lucide="cpu" class="w-5 h-5 text-amber-400"></i>
+            </div>
+            <p class="text-3xl font-black mt-2 text-white">FFmpeg</p>
+            <span class="text-xs text-emerald-400 mt-2 inline-flex items-center gap-1 font-medium">
+              Ken Burns + Ducking Active
+            </span>
+          </div>
+        </div>
+
+        <!-- Recent Projects Section -->
+        <div class="bg-dark-900 border border-dark-800 rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="folder-git-2" class="w-4 h-4 text-brand-400"></i> Recent Projects
+            </h3>
+            <button onclick="switchTab('create')" class="px-4 py-1.5 text-xs font-semibold rounded-xl bg-brand-500 hover:bg-brand-600 text-black transition flex items-center gap-1.5 shadow-md shadow-brand-500/20">
+              <i data-lucide="plus" class="w-3.5 h-3.5 stroke-[3]"></i> New Story
+            </button>
+          </div>
+          <div id="recent-projects-list" class="divide-y divide-dark-800">
+            <div class="py-6 text-center text-sm text-slate-500">Loading projects...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. CREATE STORY TAB -->
+      <section id="tab-create" class="hidden max-w-4xl space-y-6">
+        <div>
+          <h2 class="text-2xl font-bold tracking-tight">Create AI Story</h2>
+          <p class="text-sm text-slate-400 mt-1">Turn a simple concept into an emotionally gripping, multi-scene vertical script.</p>
+        </div>
+
+        <form id="create-story-form" onsubmit="handleCreateStory(event)" class="bg-dark-900 border border-dark-800 rounded-2xl p-6 space-y-6">
+          <!-- Topic Input -->
+          <div>
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Story Topic or Concept *</label>
+            <textarea id="input-topic" rows="3" required placeholder="e.g. A poor boy who never gave up on his dreams despite everyone laughing at him." class="w-full bg-dark-950 border border-dark-700 rounded-xl p-3.5 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition placeholder-slate-600"></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <!-- Category -->
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Category / Style</label>
+              <select id="input-category" class="w-full bg-dark-950 border border-dark-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-brand-500">
+                <option value="inspirational">Inspirational & Overcoming Adversity</option>
+                <option value="emotional">Emotional & Family Sacrifice</option>
+                <option value="life_lessons">Profound Life Lessons</option>
+                <option value="success_stories">Zero to Hero Success</option>
+                <option value="failure_comeback">Heartbreaking Failure & Comeback</option>
+                <option value="discipline">Unshakable Daily Discipline</option>
+                <option value="friendship">Loyalty & True Friendship</option>
+                <option value="entrepreneurial">Relentless Entrepreneur Mindset</option>
+              </select>
+            </div>
+
+            <!-- Language -->
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Language</label>
+              <select id="input-language" class="w-full bg-dark-950 border border-dark-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-brand-500">
+                <option value="English">English (US Neural)</option>
+                <option value="Telugu">Telugu / తెలుగు (Indian Neural)</option>
+              </select>
+            </div>
+
+            <!-- Duration -->
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Target Duration</label>
+              <select id="input-duration" class="w-full bg-dark-950 border border-dark-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-brand-500">
+                <option value="30">30 Seconds (Fast Hook & Climax)</option>
+                <option value="60" selected>60 Seconds (Optimal Shorts Format)</option>
+                <option value="90">90 Seconds (Deep Emotional Arc)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Emotional Tone</label>
+              <select id="input-tone" class="w-full bg-dark-950 border border-dark-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-brand-500">
+                <option value="determination">Determination & Grit</option>
+                <option value="heartwarming">Heartwarming & Tear-jerking</option>
+                <option value="suspenseful">Suspenseful & High Stakes</option>
+                <option value="triumphant">Triumphant & Victorious</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Visual Style</label>
+              <select id="input-visual" class="w-full bg-dark-950 border border-dark-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-brand-500">
+                <option value="cinematic">Cinematic 35mm (Photorealistic)</option>
+                <option value="dramatic_portrait">Dramatic Portrait & Rim Light</option>
+                <option value="atmospheric">Atmospheric Golden Hour</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Audience</label>
+              <select id="input-audience" class="w-full bg-dark-950 border border-dark-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-brand-500">
+                <option value="general">Global General Public</option>
+                <option value="youth">Young Dreamers & Students</option>
+                <option value="creators">Entrepreneurs & Builders</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Strong Model & Visual Sourcing Engine Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- AI Scriptwriting Engine Card -->
+            <div class="p-4 rounded-xl bg-dark-950 border border-dark-800 flex flex-col justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400">
+                  <i data-lucide="brain-circuit" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-white uppercase tracking-wider">Scriptwriting Model</label>
+                  <p class="text-[11px] text-slate-400">Frontier reasoning models for deep emotional arcs</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 w-full">
+                <select id="input-model-provider" class="w-full bg-dark-900 border border-dark-700 rounded-lg px-3 py-2 text-xs font-semibold text-white focus:outline-none focus:border-brand-500">
+                  <option value="gemini" selected>Google Gemini 3.6 Flash (Best Frontier Free Tier)</option>
+                  <option value="groq">Groq Llama 3.3 70B (Free & Blazing Fast)</option>
+                  <option value="openrouter">OpenRouter (DeepSeek R1 / Llama 70B Free)</option>
+                  <option value="openai">OpenAI GPT-4o</option>
+                  <option value="ollama">Local Ollama (Qwen 2.5 14B / Llama 3.3)</option>
+                  <option value="heuristic">Built-in Offline Archetypes</option>
+                </select>
+                <button type="button" onclick="switchTab('settings')" class="px-2.5 py-2 rounded-lg bg-dark-800 hover:bg-dark-700 border border-dark-700 text-xs font-semibold text-slate-300 flex items-center gap-1 transition whitespace-nowrap">
+                  <i data-lucide="key" class="w-3.5 h-3.5 text-brand-400"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Image Sourcing Engine Card -->
+            <div class="p-4 rounded-xl bg-dark-950 border border-dark-800 flex flex-col justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+                  <i data-lucide="image" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-white uppercase tracking-wider">Visual Image Engine</label>
+                  <p class="text-[11px] text-slate-400">AI generation or real-world web stock scraping (1080x1920)</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 w-full">
+                <select id="input-image-provider" class="w-full bg-dark-900 border border-dark-700 rounded-lg px-3 py-2 text-xs font-semibold text-white focus:outline-none focus:border-amber-500">
+                  <option value="pollinations" selected>AI Generative (FLUX / Turbo - Free)</option>
+                  <option value="web_scrape">Web Stock Photos (Scraped Real Images - Free)</option>
+                  <option value="procedural">Procedural Cinematic Canvas (Fastest / Offline)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2 flex items-center justify-end">
+            <button type="submit" id="btn-generate-story" class="px-7 py-3 rounded-xl bg-gradient-to-r from-brand-500 to-amber-500 hover:from-brand-600 hover:to-amber-600 text-black font-bold text-sm shadow-lg shadow-brand-500/25 flex items-center gap-2 transition">
+              <i data-lucide="sparkles" class="w-4 h-4 stroke-[3]"></i> Generate Complete Story
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- 3. STORY & HOOK EDITOR TAB -->
+      <section id="tab-story-editor" class="hidden max-w-5xl space-y-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-2xl font-bold tracking-tight">Story Script & Hook Optimizer</h2>
+            <p class="text-sm text-slate-400 mt-1">Review heuristic retention scores, choose alternative opening hooks, and polish narrative flow.</p>
+          </div>
+          <button onclick="auditActiveStory()" class="px-4 py-2 rounded-xl bg-dark-800 hover:bg-dark-700 border border-dark-700 text-xs font-semibold text-slate-200 flex items-center gap-2">
+            <i data-lucide="search-check" class="w-4 h-4 text-brand-400"></i> Audit Quality
+          </button>
+        </div>
+
+        <!-- Hook Optimization Cards -->
+        <div class="bg-dark-900 border border-dark-800 rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+              <i data-lucide="zap" class="w-4 h-4 text-brand-400"></i> 3-Second Opening Hook Options
+            </h3>
+            <span id="hook-score-badge" class="px-2.5 py-1 rounded-full bg-brand-500/10 text-brand-400 border border-brand-500/20 text-xs font-bold">Retention Score: 88/100</span>
+          </div>
+
+          <div id="hooks-container" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Dynamic Hook Cards -->
+          </div>
+        </div>
+
+        <!-- Story Script Editor -->
+        <div class="bg-dark-900 border border-dark-800 rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300">Full Spoken Script</h3>
+            <span id="script-word-count" class="text-xs text-slate-400">Word count: ~110 words</span>
+          </div>
+          <textarea id="editor-story-text" rows="8" class="w-full bg-dark-950 border border-dark-700 rounded-xl p-4 text-sm text-white leading-relaxed focus:outline-none focus:border-brand-500"></textarea>
+
+          <div class="p-4 bg-dark-950/80 rounded-xl border border-dark-800 flex items-center justify-between">
+            <div>
+              <span class="text-xs uppercase font-bold tracking-wider text-slate-400">Moral Takeaway:</span>
+              <p id="editor-moral-text" class="text-sm text-amber-200 mt-0.5 italic"></p>
+            </div>
+            <button onclick="saveStoryEdits()" class="px-5 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-black font-bold text-xs shadow">Save Script</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. STORYBOARD TAB -->
+      <section id="tab-storyboard" class="hidden space-y-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-2xl font-bold tracking-tight">Scene Storyboard</h2>
+            <p class="text-sm text-slate-400 mt-1">Manage scene-by-scene cinematography, camera movement, and visual prompts.</p>
+          </div>
+          <button onclick="generateAllImages()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-brand-500 to-amber-500 text-black font-bold text-xs flex items-center gap-2">
+            <i data-lucide="image" class="w-4 h-4 stroke-[2.5]"></i> Generate All Scene Images
+          </button>
+        </div>
+
+        <div id="storyboard-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- 5. VOICE STUDIO TAB -->
+      <section id="tab-voice-studio" class="hidden max-w-4xl space-y-6">
+        <div>
+          <h2 class="text-2xl font-bold tracking-tight">Voice Studio</h2>
+          <p class="text-sm text-slate-400 mt-1">Select neural narration voices with English and Telugu native support.</p>
+        </div>
+
+        <div class="bg-dark-900 border border-dark-800 rounded-2xl p-6 space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Selected Neural Voice</label>
+              <select id="voice-select" onchange="updateVoiceSelection()" class="w-full bg-dark-950 border border-dark-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-brand-500">
+                <option value="en-US-GuyNeural">Guy (Male - Deep & Dynamic Shorts Voice) [EN]</option>
+                <option value="en-US-ChristopherNeural">Christopher (Male - Inspirational & Calm) [EN]</option>
+                <option value="en-US-AndrewMultilingualNeural">Andrew (Male - Conversational Multilingual) [EN]</option>
+                <option value="en-US-BrianMultilingualNeural">Brian (Male - Deep Documentary) [EN]</option>
+                <option value="en-US-JennyNeural">Jenny (Female - Warm & Clear) [EN]</option>
+                <option value="en-US-AvaMultilingualNeural">Ava (Female - Expressive & Cinematic) [EN]</option>
+                <option value="en-US-AriaNeural">Aria (Female - Dramatic & Emotional) [EN]</option>
+                <option value="en-GB-RyanNeural">Ryan (Male UK - Sophisticated Storyteller) [EN]</option>
+                <option value="te-IN-MohanNeural">Mohan (పురుషుడు - Male Telugu Inspirational) [TE]</option>
+                <option value="te-IN-ShrutiNeural">Shruti (స్త్రీ - Female Telugu Storyteller) [TE]</option>
+                <option value="hi-IN-MadhurNeural">Madhur (पुरुष - Male Hindi) [HI]</option>
+                <option value="hi-IN-SwaraNeural">Swara (महिला - Female Hindi) [HI]</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Speaking Speed (<span id="speed-val">1.0</span>x)</label>
+              <input type="range" id="voice-speed" min="0.8" max="1.3" step="0.05" value="1.0" oninput="document.getElementById('speed-val').innerText = this.value" class="w-full mt-2 accent-brand-500">
+            </div>
+          </div>
+
+          <!-- Preview Player Box -->
+          <div class="p-4 bg-dark-950 rounded-xl border border-dark-800 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <button onclick="playVoicePreview()" class="w-10 h-10 rounded-full bg-brand-500 hover:bg-brand-600 text-black flex items-center justify-center transition shadow">
+                <i data-lucide="play" class="w-4 h-4 fill-black"></i>
+              </button>
+              <div>
+                <p class="text-sm font-semibold text-white">Voice Sample Audition</p>
+                <p class="text-xs text-slate-400">Click play to preview neural voice intonation</p>
+              </div>
+            </div>
+            <audio id="preview-audio-player" class="hidden"></audio>
+            <button onclick="synthesizeAllVoice()" class="px-5 py-2.5 rounded-xl bg-dark-800 hover:bg-dark-700 text-slate-200 border border-dark-700 text-xs font-semibold flex items-center gap-2">
+              <i data-lucide="mic-2" class="w-4 h-4 text-brand-400"></i> Synthesize Full Narration
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. VIDEO EDITOR & RENDER TAB -->
+      <section id="tab-video-editor" class="hidden max-w-5xl space-y-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-2xl font-bold tracking-tight">Video Production & Assembly</h2>
+            <p class="text-sm text-slate-400 mt-1">Render vertical 1080x1920 MP4 with Ken Burns zoom, audio ducking, and word-synced animated subtitles.</p>
+          </div>
+          <button onclick="triggerRender()" id="btn-start-render" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-500 to-amber-500 hover:from-brand-600 hover:to-amber-600 text-black font-extrabold text-sm shadow-lg shadow-brand-500/20 flex items-center gap-2">
+            <i data-lucide="play-circle" class="w-4 h-4 stroke-[3]"></i> Render 1080x1920 MP4
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- 9:16 Video Player Card -->
+          <div class="lg:col-span-1 bg-dark-900 border border-dark-800 rounded-2xl p-4 flex flex-col items-center">
+            <div class="w-full flex items-center justify-between mb-3 px-1">
+              <span class="text-xs font-bold text-brand-400 uppercase tracking-wider flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span> 9:16 Shorts (1080×1920)
+              </span>
+              <button onclick="toggleShortsOverlay()" id="btn-toggle-overlay" class="text-[11px] px-2.5 py-1 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 border border-dark-700 transition flex items-center gap-1">
+                <i data-lucide="eye" class="w-3 h-3"></i> Safe Zone
+              </button>
+            </div>
+            
+            <!-- Smartphone 9:16 Container -->
+            <div class="w-[270px] h-[480px] bg-black rounded-2xl overflow-hidden border-2 border-dark-700 shadow-2xl relative flex items-center justify-center group">
+              <video id="final-video-player" controls class="w-full h-full object-cover hidden"></video>
+              <div id="video-placeholder" class="text-center p-6 text-slate-500">
+                <i data-lucide="smartphone" class="w-12 h-12 mx-auto mb-2 opacity-40 text-brand-400"></i>
+                <p class="text-xs font-semibold text-slate-400">9:16 Vertical Shorts</p>
+                <p class="text-[10px] text-slate-500 mt-1">Render video to preview composition</p>
+              </div>
+
+              <!-- YouTube Shorts / TikTok UI Overlay Simulation -->
+              <div id="shorts-ui-overlay" class="absolute inset-0 pointer-events-none p-3 flex flex-col justify-between hidden">
+                <!-- Top Header -->
+                <div class="flex items-center justify-between text-white drop-shadow text-[11px] font-semibold opacity-85">
+                  <span class="bg-black/40 backdrop-blur px-2 py-0.5 rounded text-[10px]">Shorts</span>
+                  <i data-lucide="search" class="w-3.5 h-3.5"></i>
+                </div>
+
+                <!-- Right Side Actions & Bottom Metadata -->
+                <div class="flex items-end justify-between">
+                  <!-- Bottom Creator & Caption Info -->
+                  <div class="text-white drop-shadow space-y-1.5 max-w-[190px]">
+                    <div class="flex items-center gap-1.5">
+                      <div class="w-5 h-5 rounded-full bg-gradient-to-tr from-brand-400 to-amber-400 border border-white"></div>
+                      <span class="text-[11px] font-bold">@StoryForge</span>
+                    </div>
+                    <p class="text-[10px] text-slate-100 line-clamp-2 leading-tight">#viral #shorts #inspiration #success</p>
+                    <div class="flex items-center gap-1 text-[9px] text-slate-200">
+                      <i data-lucide="music-2" class="w-2.5 h-2.5 animate-spin"></i>
+                      <span class="truncate">Original Soundtrack • StoryForge AI</span>
+                    </div>
+                  </div>
+
+                  <!-- Right Vertical Action Bar -->
+                  <div class="flex flex-col items-center gap-3 text-white drop-shadow">
+                    <div class="flex flex-col items-center">
+                      <div class="w-8 h-8 rounded-full bg-black/40 backdrop-blur flex items-center justify-center">
+                        <i data-lucide="thumbs-up" class="w-4 h-4 text-white"></i>
+                      </div>
+                      <span class="text-[9px] font-bold mt-0.5">24.5K</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                      <div class="w-8 h-8 rounded-full bg-black/40 backdrop-blur flex items-center justify-center">
+                        <i data-lucide="message-square" class="w-4 h-4 text-white"></i>
+                      </div>
+                      <span class="text-[9px] font-bold mt-0.5">842</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                      <div class="w-8 h-8 rounded-full bg-black/40 backdrop-blur flex items-center justify-center">
+                        <i data-lucide="share-2" class="w-4 h-4 text-white"></i>
+                      </div>
+                      <span class="text-[9px] font-bold mt-0.5">Share</span>
+                    </div>
+                    <div class="w-7 h-7 rounded-full bg-dark-900 border border-white/50 animate-spin mt-1"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <a id="btn-download-video" href="#" download class="mt-4 w-full py-2.5 rounded-xl bg-dark-800 hover:bg-dark-700 border border-dark-700 text-center text-xs font-bold text-slate-200 hidden transition flex items-center justify-center gap-2">
+              <i data-lucide="download" class="w-4 h-4"></i> Download 9:16 Shorts MP4
+            </a>
+          </div>
+
+          <!-- Video & Audio Settings -->
+          <div class="lg:col-span-2 space-y-5">
+            <div class="bg-dark-900 border border-dark-800 rounded-2xl p-5 space-y-4">
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <i data-lucide="music" class="w-4 h-4 text-brand-400"></i> Soundtrack & Ducking
+              </h3>
+              <div class="grid grid-cols-2 gap-4 text-xs">
+                <div>
+                  <label class="block text-slate-300 mb-1">Background Mood</label>
+                  <select id="bgm-mood-select" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2.5 text-white">
+                    <option value="Inspirational">Inspirational Bed (Warm 9th Chord)</option>
+                    <option value="Emotional">Emotional & Tender (F Major / D Minor)</option>
+                    <option value="Hopeful">Hopeful & Uplifting (C Major 9th)</option>
+                    <option value="Victory">Victory & Climax (Triumphant Horns)</option>
+                    <option value="Suspense">Dramatic Suspense (Dark Tension Drone)</option>
+                    <option value="Sad">Somber Melancholy (D Minor Pad)</option>
+                    <option value="Calm">Serene Calm (E Minor 11th Soundscape)</option>
+                  </select>
+                  <div class="mt-2.5 flex items-center gap-2">
+                    <button type="button" onclick="previewBgmTrack()" id="btn-preview-bgm" class="px-3 py-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-[11px] font-semibold text-brand-400 border border-dark-700 flex items-center gap-1.5 transition shadow">
+                      <i data-lucide="volume-2" class="w-3.5 h-3.5 text-brand-400"></i> Audition Soundtrack
+                    </button>
+                    <audio id="bgm-preview-player" class="hidden"></audio>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-slate-300 mb-1">Music Ducking Volume (<span id="bgm-vol-val">18%</span>)</label>
+                  <input type="range" min="0.05" max="0.4" step="0.01" value="0.18" oninput="document.getElementById('bgm-vol-val').innerText = Math.round(this.value*100) + '%'" class="w-full mt-2 accent-brand-500">
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-dark-900 border border-dark-800 rounded-2xl p-5 space-y-4">
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <i data-lucide="subtitles" class="w-4 h-4 text-brand-400"></i> Captions & Subtitles
+              </h3>
+              <div class="text-xs text-slate-400 space-y-2">
+                <p>• Font: <strong class="text-white">Nirmala UI</strong> (Full Telugu Unicode & Latin glyph support)</p>
+                <p>• Styling: <strong class="text-brand-400">Vibrant Gold Active-Word Highlighting</strong> with drop shadow</p>
+                <p>• Safe Margin: Positioned above social UI overlays (bottom 380px safe zone)</p>
+              </div>
+            </div>
+
+            <!-- Live Rendering Status Bar -->
+            <div id="render-progress-box" class="bg-dark-900 border border-dark-800 rounded-2xl p-5 hidden space-y-3">
+              <div class="flex items-center justify-between text-xs font-semibold">
+                <span id="render-status-label" class="text-brand-400">Rendering Video...</span>
+                <span id="render-percent-label" class="text-white">0%</span>
+              </div>
+              <div class="w-full bg-dark-950 rounded-full h-3 overflow-hidden border border-dark-700">
+                <div id="render-progress-bar" class="h-full bg-gradient-to-r from-brand-500 to-amber-400 transition-all duration-300 w-0"></div>
+              </div>
+            </div>
+
+            <!-- YouTube Publishing Gate -->
+            <div class="bg-dark-900 border border-dark-800 rounded-2xl p-5 flex items-center justify-between">
+              <div>
+                <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                  <i data-lucide="youtube" class="w-4 h-4 text-red-500"></i> YouTube Publishing
+                </h4>
+                <p class="text-xs text-slate-400 mt-0.5">Publish to connected channel with verified approval.</p>
+              </div>
+              <button onclick="openPublishModal()" class="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow flex items-center gap-1.5 transition">
+                <i data-lucide="upload" class="w-3.5 h-3.5"></i> Publish Video
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. VIRAL ANALYTICS TAB -->
+      <section id="tab-analytics" class="hidden max-w-5xl space-y-6">
+        <div>
+          <h2 class="text-2xl font-bold tracking-tight">Viral Content Analytics & Feedback Loop</h2>
+          <p class="text-sm text-slate-400 mt-1">Empirical short-form metrics tracking and AI recommendations to improve future retention.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+          <div class="bg-dark-900 border border-dark-800 rounded-2xl p-4">
+            <span class="text-xs text-slate-400 uppercase tracking-wider">3-Second Retention</span>
+            <p id="ana-retention" class="text-3xl font-black text-emerald-400 mt-1">78.5%</p>
+            <span class="text-[11px] text-slate-400 mt-1 block">Scroll-stopping power</span>
+          </div>
+
+          <div class="bg-dark-900 border border-dark-800 rounded-2xl p-4">
+            <span class="text-xs text-slate-400 uppercase tracking-wider">Avg View Duration</span>
+            <p id="ana-avd" class="text-3xl font-black text-white mt-1">43.2s</p>
+            <span class="text-[11px] text-slate-400 mt-1 block">Across 60s target</span>
+          </div>
+
+          <div class="bg-dark-900 border border-dark-800 rounded-2xl p-4">
+            <span class="text-xs text-slate-400 uppercase tracking-wider">% Watched</span>
+            <p id="ana-watched" class="text-3xl font-black text-amber-400 mt-1">72.0%</p>
+            <span class="text-[11px] text-slate-400 mt-1 block">Optimal completion rate</span>
+          </div>
+
+          <div class="bg-dark-900 border border-dark-800 rounded-2xl p-4">
+            <span class="text-xs text-slate-400 uppercase tracking-wider">Engagement Rate</span>
+            <p id="ana-engagement" class="text-3xl font-black text-brand-400 mt-1">5.4%</p>
+            <span class="text-[11px] text-slate-400 mt-1 block">Likes, comments, shares</span>
+          </div>
+        </div>
+
+        <!-- AI Improvement Recommendations -->
+        <div class="bg-dark-900 border border-dark-800 rounded-2xl p-6 space-y-4">
+          <h3 class="text-base font-bold text-white flex items-center gap-2">
+            <i data-lucide="lightbulb" class="w-5 h-5 text-amber-400"></i> Data-Driven Content Recommendations
+          </h3>
+          <div id="ana-recommendations" class="space-y-3 text-sm text-slate-300">
+            <!-- Dynamic recommendations -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. SETTINGS & DIAGNOSTICS TAB -->
+      <section id="tab-settings" class="hidden max-w-4xl space-y-6">
+        <div>
+          <h2 class="text-2xl font-bold tracking-tight">AI Models & System Settings</h2>
+          <p class="text-sm text-slate-400 mt-1">Configure strong frontier models (Google Gemini, Groq, OpenRouter) and monitor hardware acceleration.</p>
+        </div>
+
+        <!-- Frontier AI Models Setup Card -->
+        <div class="bg-dark-900 border border-dark-800 rounded-2xl p-6 space-y-5">
+          <div class="flex items-center justify-between border-b border-dark-800 pb-3">
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="sparkles" class="w-4 h-4 text-brand-400"></i> Frontier Scriptwriting Engine
+            </h3>
+            <span class="text-xs px-2.5 py-0.5 rounded-full bg-brand-500/10 text-brand-400 border border-brand-500/20 font-semibold">Free Tiers Available</span>
+          </div>
+
+          <form onsubmit="handleSaveAiConfig(event)" class="space-y-4 text-xs">
+            <!-- Google Gemini -->
+            <div class="p-4 rounded-xl bg-dark-950 border border-dark-800 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-white flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-blue-400"></span> Google Gemini (Gemini 3.6 Flash / 3.5 Flash - Free Tier)
+                </span>
+                <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-brand-400 hover:underline flex items-center gap-1">
+                  Get Free Key <i data-lucide="external-link" class="w-3 h-3"></i>
+                </a>
+              </div>
+              <p class="text-slate-400 text-[11px]">Free 15 RPM / 1M TPM. Deep emotional character arcs, tension building, and authentic Telugu & English narration.</p>
+              <input type="password" id="cfg-gemini-key" placeholder="AIzaSy... (Paste Google AI Studio API Key)" class="w-full bg-dark-900 border border-dark-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-brand-500 font-mono">
+            </div>
+
+            <!-- Groq Llama 3.3 70B -->
+            <div class="p-4 rounded-xl bg-dark-950 border border-dark-800 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-white flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-orange-400"></span> Groq Cloud (Llama 3.3 70B Versatile)
+                </span>
+                <a href="https://console.groq.com/keys" target="_blank" class="text-brand-400 hover:underline flex items-center gap-1">
+                  Get Free Key <i data-lucide="external-link" class="w-3 h-3"></i>
+                </a>
+              </div>
+              <p class="text-slate-400 text-[11px]">Free tier. Blazing fast 300+ tokens/sec, punchy viral hooks, concise storytelling.</p>
+              <input type="password" id="cfg-groq-key" placeholder="gsk_... (Paste Groq API Key)" class="w-full bg-dark-900 border border-dark-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-brand-500 font-mono">
+            </div>
+
+            <!-- OpenAI / OpenRouter -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="p-4 rounded-xl bg-dark-950 border border-dark-800 space-y-2">
+                <span class="font-bold text-white block">OpenRouter API Key (Optional)</span>
+                <input type="password" id="cfg-openrouter-key" placeholder="sk-or-... (Free DeepSeek R1 / Llama 70B)" class="w-full bg-dark-900 border border-dark-700 rounded-lg p-2.5 text-white font-mono">
+              </div>
+              <div class="p-4 rounded-xl bg-dark-950 border border-dark-800 space-y-2">
+                <span class="font-bold text-white block">OpenAI API Key (Optional)</span>
+                <input type="password" id="cfg-openai-key" placeholder="sk-... (GPT-4o)" class="w-full bg-dark-900 border border-dark-700 rounded-lg p-2.5 text-white font-mono">
+              </div>
+            </div>
+
+            <div class="flex items-center justify-end pt-2">
+              <button type="submit" id="btn-save-ai-cfg" class="px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-black font-bold text-xs shadow flex items-center gap-1.5 transition">
+                <i data-lucide="save" class="w-4 h-4"></i> Save Model Configuration
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div id="diagnostics-container" class="bg-dark-900 border border-dark-800 rounded-2xl p-6 space-y-4">
+          <p class="text-sm text-slate-400">Inspecting system capabilities...</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- PUBLISH CONFIRMATION MODAL -->
+  <div id="publish-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-dark-900 border border-dark-700 rounded-2xl max-w-md w-full p-6 space-y-5">
+      <div class="flex items-center justify-between border-b border-dark-800 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="youtube" class="w-5 h-5 text-red-500"></i> Publishing Approval Gate
+        </h3>
+        <button onclick="closePublishModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-400 mb-1 font-semibold">Video Title</label>
+          <input type="text" id="modal-title" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2.5 text-white">
+        </div>
+        <div>
+          <label class="block text-slate-400 mb-1 font-semibold">Privacy Status</label>
+          <select id="modal-privacy" class="w-full bg-dark-950 border border-dark-700 rounded-lg p-2.5 text-white">
+            <option value="private">Private (Recommended for review)</option>
+            <option value="unlisted">Unlisted</option>
+            <option value="public">Public</option>
+          </select>
+        </div>
+        <div class="p-3 bg-brand-500/10 border border-brand-500/20 rounded-xl text-brand-300">
+          <p class="font-semibold mb-1">Human Approval Requirement</p>
+          <p class="text-[11px] text-slate-300">StoryForge AI will never publish without your explicit consent. Click confirm to proceed.</p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-2">
+        <button onclick="closePublishModal()" class="px-4 py-2 rounded-xl bg-dark-800 hover:bg-dark-700 text-xs font-semibold text-slate-300">Cancel</button>
+        <button onclick="confirmPublish()" class="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow">Confirm & Publish</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPLICATION LOGIC SCRIPT -->
+  <script>
+    let activeProject = null;
+    let pollInterval = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+      loadDiagnostics();
+      loadProjects();
+    });
+
+    function switchTab(tabId) {
+      document.querySelectorAll("main > section").forEach(el => el.classList.add("hidden"));
+      const target = document.getElementById("tab-" + tabId);
+      if (target) target.classList.remove("hidden");
+
+      document.querySelectorAll(".nav-btn").forEach(el => {
+        el.classList.remove("text-brand-400", "bg-brand-500/10", "border", "border-brand-500/20");
+        el.classList.add("text-slate-300");
+      });
+      const activeBtn = document.getElementById("nav-" + tabId);
+      if (activeBtn) {
+        activeBtn.classList.add("text-brand-400", "bg-brand-500/10", "border", "border-brand-500/20");
+        activeBtn.classList.remove("text-slate-300");
+      }
+      lucide.createIcons();
+    }
+
+    async function loadDiagnostics() {
+      try {
+        const res = await fetch("/api/v1/system/diagnostics");
+        const data = await res.json();
+        const container = document.getElementById("diagnostics-container");
+        if (!container) return;
+
+        let html = '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
+        for (const [key, svc] of Object.entries(data.services)) {
+          const isReady = svc.status.includes("ready");
+          html += `
+            <div class="p-4 rounded-xl bg-dark-950 border border-dark-800 flex items-start justify-between">
+              <div>
+                <span class="text-xs uppercase font-bold tracking-wider text-slate-400">${key.replace("_", " ")}</span>
+                <p class="text-sm font-semibold text-white mt-1 capitalize">${svc.provider || "System"}</p>
+                <p class="text-xs text-slate-500 mt-0.5 truncate max-w-[200px]">${svc.version || svc.status}</p>
+              </div>
+              <span class="px-2.5 py-1 rounded-full text-xs font-bold ${isReady ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400'}">
+                ${svc.status}
+              </span>
+            </div>
+          `;
+        }
+        html += '</div>';
+        container.innerHTML = html;
+      } catch (err) {
+        console.error("Failed loading diagnostics:", err);
+      }
+    }
+
+    async function loadProjects() {
+      try {
+        const res = await fetch("/api/v1/projects/");
+        const projects = await res.json();
+        document.getElementById("stat-total-videos").innerText = projects.length;
+
+        const listEl = document.getElementById("recent-projects-list");
+        if (projects.length === 0) {
+          listEl.innerHTML = '<div class="py-6 text-center text-sm text-slate-500">No projects created yet. Start with "Create Story".</div>';
+          return;
+        }
+
+        listEl.innerHTML = projects.map(p => `
+          <div class="py-4 flex items-center justify-between hover:bg-dark-850/50 px-3 rounded-xl transition cursor-pointer" onclick="selectProject(${p.id})">
+            <div class="space-y-1">
+              <h4 class="text-sm font-bold text-white hover:text-brand-400 transition">${p.title}</h4>
+              <p class="text-xs text-slate-400 line-clamp-1 max-w-xl">${p.topic}</p>
+            </div>
+            <div class="flex items-center gap-4 text-xs">
+              <span class="px-2.5 py-0.5 rounded-full bg-dark-800 text-slate-300 border border-dark-700">${p.language}</span>
+              <span class="px-2.5 py-0.5 rounded-full ${p.status === 'completed' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-brand-500/10 text-brand-400'} capitalize font-semibold">${p.status}</span>
+            </div>
+          </div>
+        `).join("");
+
+        if (!activeProject && projects.length > 0) {
+          selectProject(projects[0].id);
+        }
+      } catch (err) {
+        console.error("Failed loading projects:", err);
+      }
+    }
+
+    async function selectProject(id) {
+      try {
+        const res = await fetch(`/api/v1/projects/${id}`);
+        activeProject = await res.json();
+
+        document.getElementById("proj-title-display").innerText = activeProject.title;
+        document.getElementById("proj-status-badge").innerText = activeProject.status;
+        document.getElementById("proj-duration-display").innerText = activeProject.duration_target + "s";
+        document.getElementById("proj-lang-display").innerText = activeProject.language;
+
+        // Populate Story Editor
+        let storyMeta = {};
+        if (activeProject.story_json) {
+          try { storyMeta = JSON.parse(activeProject.story_json); } catch(e){}
+        }
+
+        document.getElementById("editor-story-text").value = storyMeta.story || activeProject.topic;
+        document.getElementById("editor-moral-text").innerText = storyMeta.moral || "Resilience determines your future.";
+
+        // Populate Hooks
+        const hooksContainer = document.getElementById("hooks-container");
+        const altHooks = storyMeta.alternative_hooks || [
+          { hook_text: storyMeta.hook || "A story that changes everything.", hook_type: "curiosity", explanation: "Default generated hook" }
+        ];
+        hooksContainer.innerHTML = altHooks.map((h, i) => `
+          <div class="p-4 rounded-xl bg-dark-950 border border-dark-800 hover:border-brand-500/50 transition cursor-pointer" onclick="applyHook('${h.hook_text.replace(/'/g, "\\'")}')">
+            <span class="text-[10px] uppercase font-bold tracking-wider text-brand-400 px-2 py-0.5 rounded bg-brand-500/10">${h.hook_type || 'Alternative Hook'}</span>
+            <p class="text-xs font-semibold text-white mt-2 leading-snug">"${h.hook_text}"</p>
+            <p class="text-[11px] text-slate-500 mt-2">${h.explanation || ''}</p>
+          </div>
+        `).join("");
+
+        // Populate Storyboard
+        populateStoryboard(activeProject.scenes);
+
+        // Populate Analytics
+        loadAnalytics(activeProject.id);
+
+        lucide.createIcons();
+      } catch (err) {
+        console.error("Select project failed:", err);
+      }
+    }
+
+    function populateStoryboard(scenes) {
+      const grid = document.getElementById("storyboard-grid");
+      if (!scenes || scenes.length === 0) {
+        grid.innerHTML = '<div class="col-span-3 py-12 text-center text-sm text-slate-500">No scenes in storyboard.</div>';
+        return;
+      }
+
+      grid.innerHTML = scenes.map(s => `
+        <div class="bg-dark-900 border border-dark-800 rounded-2xl overflow-hidden flex flex-col justify-between">
+          <div>
+            <div class="h-56 bg-black relative flex items-center justify-center overflow-hidden">
+              ${s.image_path ? `
+                <img src="/static/assets/images/${s.image_path.split('\\').pop().split('/').pop()}" class="w-full h-full object-cover">
+              ` : `
+                <div class="text-center p-4 text-slate-600">
+                  <i data-lucide="image" class="w-8 h-8 mx-auto mb-1 opacity-50"></i>
+                  <span class="text-xs">No image generated</span>
+                </div>
+              `}
+              <span class="absolute top-3 left-3 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur text-[11px] font-bold text-amber-400">
+                Scene #${s.scene_number}
+              </span>
+              <span class="absolute bottom-3 right-3 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur text-[11px] font-mono text-white">
+                ${s.duration || 5.0}s
+              </span>
+            </div>
+            <div class="p-4 space-y-2">
+              <p class="text-xs font-semibold text-white line-clamp-2 leading-relaxed">${s.narration}</p>
+              <p class="text-[11px] text-slate-400 italic line-clamp-2">Prompt: ${s.visual_prompt || ''}</p>
+            </div>
+          </div>
+          <div class="p-4 pt-0 flex items-center justify-between border-t border-dark-800/80 mt-2">
+            <span class="text-[11px] font-medium text-slate-400 capitalize">${s.camera_movement || 'slow_zoom_in'}</span>
+            <button onclick="regenerateSceneImage(${s.id})" class="text-xs text-brand-400 hover:text-brand-300 font-semibold flex items-center gap-1">
+              <i data-lucide="refresh-cw" class="w-3 h-3"></i> Regenerate
+            </button>
+          </div>
+        </div>
+      `).join("");
+      lucide.createIcons();
+    }
+
+    async function handleSaveAiConfig(e) {
+      e.preventDefault();
+      const geminiKey = document.getElementById("cfg-gemini-key").value;
+      const groqKey = document.getElementById("cfg-groq-key").value;
+      const openrouterKey = document.getElementById("cfg-openrouter-key").value;
+      const openaiKey = document.getElementById("cfg-openai-key").value;
+      const provider = document.getElementById("input-model-provider") ? document.getElementById("input-model-provider").value : "gemini";
+
+      try {
+        const res = await fetch("/api/v1/system/ai-config", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            provider: provider,
+            gemini_api_key: geminiKey,
+            groq_api_key: groqKey,
+            openrouter_api_key: openrouterKey,
+            openai_api_key: openaiKey,
+          }),
+        });
+        if (res.ok) {
+          alert("Frontier AI Model & API Key Configuration Saved!");
+          loadDiagnostics();
+        }
+      } catch (err) {
+        alert("Save failed: " + err.message);
+      }
+    }
+
+    async function handleCreateStory(e) {
+      e.preventDefault();
+      const btn = document.getElementById("btn-generate-story");
+      btn.disabled = true;
+      btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Generating Story...';
+
+      // Update scriptwriting and image engines if selected
+      const selectedProvider = document.getElementById("input-model-provider").value;
+      const selectedImageProvider = document.getElementById("input-image-provider") ? document.getElementById("input-image-provider").value : "pollinations";
+      try {
+        await fetch("/api/v1/system/ai-config", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            provider: selectedProvider,
+            image_provider: selectedImageProvider
+          }),
+        });
+      } catch(e){}
+
+      const payload = {
+        topic: document.getElementById("input-topic").value,
+        category: document.getElementById("input-category").value,
+        language: document.getElementById("input-language").value,
+        duration: parseFloat(document.getElementById("input-duration").value),
+        emotional_tone: document.getElementById("input-tone").value,
+        visual_style: document.getElementById("input-visual").value,
+        audience: document.getElementById("input-audience").value,
+      };
+
+      try {
+        const res = await fetch("/api/v1/stories/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const proj = await res.json();
+        activeProject = proj;
+        await loadProjects();
+        selectProject(proj.id);
+        switchTab("story-editor");
+      } catch (err) {
+        alert("Failed generating story: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i data-lucide="sparkles" class="w-4 h-4 stroke-[3]"></i> Generate Complete Story';
+        lucide.createIcons();
+      }
+    }
+
+    async function regenerateSceneImage(sceneId) {
+      try {
+        const res = await fetch(`/api/v1/images/generate/${sceneId}`, { method: "POST" });
+        if (res.ok) {
+          selectProject(activeProject.id);
+        }
+      } catch (err) {
+        alert("Image generation failed: " + err.message);
+      }
+    }
+
+    async function generateAllImages() {
+      if (!activeProject) return;
+      try {
+        await fetch(`/api/v1/images/generate-all/${activeProject.id}`, { method: "POST" });
+        selectProject(activeProject.id);
+      } catch (err) {
+        alert("Image batch generation failed: " + err.message);
+      }
+    }
+
+    function updateVoiceSelection() {
+      // Keep track of voice selection
+    }
+
+    async function playVoicePreview() {
+      const voiceId = document.getElementById("voice-select").value;
+      const speed = parseFloat(document.getElementById("voice-speed").value);
+      const isTelugu = voiceId.startsWith("te-");
+      const sampleText = isTelugu 
+        ? "నమస్కారం, ఇది స్టోరీఫోర్జ్ AI స్వర నమూనా. మీ విజయ ప్రయాణం ఇక్కడే ప్రారంభమవుతుంది." 
+        : "Welcome to StoryForge AI. Your inspirational short video begins right now.";
+
+      try {
+        const res = await fetch("/api/v1/audio/preview", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            voice_id: voiceId,
+            sample_text: sampleText,
+            language: isTelugu ? "Telugu" : "English",
+            speed: speed,
+          }),
+        });
+        const data = await res.json();
+        const player = document.getElementById("preview-audio-player");
+        player.src = data.audio_url;
+        player.play();
+      } catch (err) {
+        alert("Voice preview error: " + err.message);
+      }
+    }
+
+    async function synthesizeAllVoice() {
+      if (!activeProject) {
+        alert("Please create or select a project first.");
+        return;
+      }
+      const voiceId = document.getElementById("voice-select").value;
+      const speed = parseFloat(document.getElementById("voice-speed").value);
+      try {
+        const res = await fetch(`/api/v1/audio/generate-all/${activeProject.id}?voice_id=${encodeURIComponent(voiceId)}&speed=${speed}`, {
+          method: "POST",
+        });
+        if (res.ok) {
+          alert("All scene narrations synthesized successfully with studio vocal EQ!");
+          selectProject(activeProject.id);
+        }
+      } catch (err) {
+        alert("Narration synthesis failed: " + err.message);
+      }
+    }
+
+    async function previewBgmTrack() {
+      const mood = document.getElementById("bgm-mood-select").value;
+      const player = document.getElementById("bgm-preview-player");
+      const btn = document.getElementById("btn-preview-bgm");
+
+      if (!player.paused && !player.ended && player.src) {
+        player.pause();
+        btn.innerHTML = '<i data-lucide="volume-2" class="w-3.5 h-3.5 text-brand-400"></i> Audition Soundtrack';
+        lucide.createIcons();
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/v1/audio/music/preview/${encodeURIComponent(mood)}`);
+        const data = await res.json();
+        player.src = data.audio_url;
+        player.play();
+        btn.innerHTML = '<i data-lucide="square" class="w-3.5 h-3.5 text-amber-400"></i> Stop Soundtrack';
+        lucide.createIcons();
+        player.onended = () => {
+          btn.innerHTML = '<i data-lucide="volume-2" class="w-3.5 h-3.5 text-brand-400"></i> Audition Soundtrack';
+          lucide.createIcons();
+        };
+      } catch (err) {
+        alert("Soundtrack preview failed: " + err.message);
+      }
+    }
+
+    async function triggerRender() {
+      if (!activeProject) return;
+      const box = document.getElementById("render-progress-box");
+      box.classList.remove("hidden");
+
+      try {
+        await fetch("/api/v1/renders/start", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ project_id: activeProject.id, fps: 30, format: "mp4" }),
+        });
+
+        // Start polling progress
+        if (pollInterval) clearInterval(pollInterval);
+        pollInterval = setInterval(async () => {
+          const res = await fetch(`/api/v1/renders/status/${activeProject.id}`);
+          const status = await res.json();
+
+          document.getElementById("render-status-label").innerText = status.message || "Rendering...";
+          document.getElementById("render-percent-label").innerText = status.progress + "%";
+          document.getElementById("render-progress-bar").style.width = status.progress + "%";
+
+          if (status.status === "completed") {
+            clearInterval(pollInterval);
+            const videoPlayer = document.getElementById("final-video-player");
+            const placeholder = document.getElementById("video-placeholder");
+            const downloadBtn = document.getElementById("btn-download-video");
+
+            placeholder.classList.add("hidden");
+            videoPlayer.classList.remove("hidden");
+            videoPlayer.src = status.download_url;
+            videoPlayer.load();
+
+            downloadBtn.classList.remove("hidden");
+            downloadBtn.href = status.download_url;
+            selectProject(activeProject.id);
+          }
+        }, 1500);
+      } catch (err) {
+        alert("Render start failed: " + err.message);
+      }
+    }
+
+    function toggleShortsOverlay() {
+      const el = document.getElementById("shorts-ui-overlay");
+      const btn = document.getElementById("btn-toggle-overlay");
+      if (el.classList.contains("hidden")) {
+        el.classList.remove("hidden");
+        btn.classList.add("bg-brand-500", "text-black");
+        btn.classList.remove("bg-dark-800", "text-slate-300");
+      } else {
+        el.classList.add("hidden");
+        btn.classList.remove("bg-brand-500", "text-black");
+        btn.classList.add("bg-dark-800", "text-slate-300");
+      }
+      lucide.createIcons();
+    }
+
+    async function loadAnalytics(projectId) {
+      try {
+        const res = await fetch(`/api/v1/analytics/project/${projectId}`);
+        const data = await res.json();
+
+        document.getElementById("ana-retention").innerText = data.retention_3s + "%";
+        document.getElementById("ana-avd").innerText = data.avg_view_duration + "s";
+        document.getElementById("ana-watched").innerText = data.percentage_watched + "%";
+        document.getElementById("ana-engagement").innerText = data.engagement_rate + "%";
+
+        const recEl = document.getElementById("ana-recommendations");
+        recEl.innerHTML = data.recommendations.map(r => `
+          <div class="p-3.5 rounded-xl bg-dark-950 border border-dark-800 flex items-start gap-3">
+            <i data-lucide="check" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
+            <span>${r}</span>
+          </div>
+        `).join("");
+        lucide.createIcons();
+      } catch(e){}
+    }
+
+    function openPublishModal() {
+      if (!activeProject) return;
+      document.getElementById("modal-title").value = activeProject.title + " #Shorts";
+      document.getElementById("publish-modal").classList.remove("hidden");
+      lucide.createIcons();
+    }
+
+    function closePublishModal() {
+      document.getElementById("publish-modal").classList.add("hidden");
+    }
+
+    async function confirmPublish() {
+      if (!activeProject) return;
+      try {
+        const res = await fetch("/api/v1/youtube/publish", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            project_id: activeProject.id,
+            user_approved: true,
+            custom_title: document.getElementById("modal-title").value,
+            privacy_status: document.getElementById("modal-privacy").value,
+          }),
+        });
+        const result = await res.json();
+        alert(result.message || "Video published successfully!");
+        closePublishModal();
+      } catch (err) {
+        alert("Publish failed: " + err.message);
+      }
+    }
+  </script>
+</body>
+</html>

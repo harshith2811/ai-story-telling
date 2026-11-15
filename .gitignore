@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Database
+*.db
+*.sqlite3
+
+# Node
+node_modules/
+.next/
+dist/
+
+# Generated content & Media Renders
+outputs/
+temp/
+backend/storage/outputs/
+backend/storage/temp/
+backend/storage/assets/audio/
+backend/storage/assets/images/
+storage/outputs/
+storage/temp/
+storage/assets/audio/
+storage/assets/images/
+*.mp4
+*.mkv
+*.avi
+
+# Keep ambient music soundbeds and character bible schema
+!backend/storage/assets/music/*.mp3
+!assets/music/*.mp3
+
+# Logs
+*.log
+logs/
+backend/*.log
+
+# Test coverage & Pytest
+.coverage
+htmlcov/
+.pytest_cache/
+.DS_Store
+Thumbs.db
+desktop.ini
